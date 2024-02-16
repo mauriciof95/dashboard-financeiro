@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta name="author" content="Mauricio Furtado">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Lista de notas</title>
+        <link href="assets/css/styles.css" rel="stylesheet">
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+        <link href="assets/css/dashboard.css" rel="stylesheet">
+    </head>
+    <body class="bg-light">
+      <header class="navbar navbar-light sticky-top bg-light flex-md-nowrap p-0 shadow">
+
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">
+            Meu Financeiro
+        </a>
+
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="w-100"></div>
+
+        <div class="profile d-inline-flex p-1">
+          <img src="assets/imgs/profile.jpg">
+          <div class="text-nowrap d-flex align-items-center flex-column px-2">
+            <span class="fw-bold text-dark">Administrador</span>
+            <a class="nav-link py-0 px-2 text-muted" href="#">Sair</a>
+          </div>
+        </div>
+
+      </header>
+
+      <div class="container-fluid">
+          <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+              <div class="position-sticky pt-3">
+                <ul class="nav flex-column">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">
+                      Dashboard
+                    </a>
+                  </li>
+                </ul>
+        
+              </div>
+            </nav>
+        
+            <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+                <h1 class="h2">Dashboard </h1>
+              </div>
+
+              <div class="card my-2 shadow border-0">
+                <div class="card-header text-center">
+                  <h5>Gráfico de Receita</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row border-bottom mb-2 pb-2">
+                    <div class="col">
+                      <div>
+                        <div><h5>Filtros</h5></div>
+
+                        <div class="d-inline-flex">
+                          <div class="me-1">
+                            <input type="radio" class="btn-radio" id="filtro-receita-mensal" value="mensal" name="filtro-receita" checked>
+                            <label class="btn-radio-label" for="filtro-receita-mensal">Mensal</label>
+                          </div>
+                          <div class="me-1">
+                            <input type="radio" class="btn-radio" id="filtro-receita-trimestral" value="trimestral" name="filtro-receita">
+                            <label class="btn-radio-label" for="filtro-receita-trimestral">Trimestral</label>
+                          </div>
+                          <div class="me-1">
+                            <input type="radio" class="btn-radio" id="filtro-receita-anual" value="anual" name="filtro-receita">
+                            <label class="btn-radio-label" for="filtro-receita-anual">Anual</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col">
+                      <canvas id="chart-receita"></canvas>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="card my-2 shadow border-0">
+                <div class="card-header text-center">
+                  <h5>Gráfico de Inadiplência</h5>
+                </div>
+                <div class="card-body">
+                  <div class="row border-bottom mb-2 pb-2">
+                    <div class="col">
+                      <div>
+                        <div><h5>Filtros</h5></div>
+
+                        <div class="d-inline-flex">
+                          <div class="me-1">
+                            <input type="radio" class="btn-radio" id="filtro-inadiplencia-mensal" value="mensal" name="filtro-inadiplencia" checked>
+                            <label class="btn-radio-label" for="filtro-inadiplencia-mensal">Mensal</label>
+                          </div>
+                          <div class="me-1">
+                            <input type="radio" class="btn-radio" id="filtro-inadiplencia-trimestral" value="trimestral" name="filtro-inadiplencia">
+                            <label class="btn-radio-label" for="filtro-inadiplencia-trimestral">Trimestral</label>
+                          </div>
+                          <div class="me-1">
+                            <input type="radio" class="btn-radio" id="filtro-inadiplencia-anual" value="anual" name="filtro-inadiplencia">
+                            <label class="btn-radio-label" for="filtro-inadiplencia-anual">Anual</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col">
+                      <canvas id="chart-inadiplencia"></canvas>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+
+              <div class="card my-2 shadow border-0">
+                <div class="card-body">
+                  <table class="table">
+                      <tr>
+                        <th>Total de notas emitidas sem cobrança</th>
+                        <td id="total_notas_emitidas_sem_cobranca"></td>
+                      </tr>
+                      <tr>
+                        <th>Total de notas vencidas</th>
+                        <td id="total_notas_vencidas"></td>
+                      </tr>
+                      <tr>
+                        <th>Total de notas a vencer</th>
+                        <td id="total_notas_vencer"></td>
+                      </tr>
+                      <tr>
+                        <th>Total de notas pagas</th>
+                        <td id="total_notas_pagas"></td>
+                      </tr>
+                      <tr>
+                        <th>Total de notas emitidas</th>
+                        <td id="total_notas_emitidas"></td>
+                      </tr>
+                  </table>
+                </div>
+              </div>
+
+              <div class="card my-2 shadow border-0">
+                <div class="card-body">
+                  <div class="row mb-2">
+                    <div class="col">
+                      <fieldset>
+                        <legend>Legenda</legend>
+                        <div class="d-flex align-items-center">
+                          <div class="quadrado legenda-status-emitida"></div> 
+                          <span>Emitida</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                          <div class="quadrado legenda-cobranca-realizada"></div> 
+                          <span>Cobrança realizada</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                          <div class="quadrado legenda-pagamento-atrasado"></div> 
+                          <span>Pagamento em atraso</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                          <div class="quadrado legenda-status-pagamento-realizado"></div> 
+                          <span>Pagamento realizado</span>
+                        </div>
+                      </fieldset>
+                    </div>
+                  </div>
+
+                  <div class="row mt-3">
+                    <div class="col">
+                      <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Filtros
+                      </button>
+                  
+                      <div class="accordion accordion-flush" id="accordionNotasFiltro">
+                        <div class="accordion-item">
+                          <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne">
+                            <div class="accordion-body">
+                              <form id="formFiltros">
+                              <div class="row">
+                                <div class="col-12 col-sm-6 col-lg-3">
+    
+                                  <div class="mb-3">
+                                    <label for="mes_emissao" class="form-label">Mês de emissão da nota</label>
+                                    <select id="mes_emissao" class="form-select">
+                                      <option value="todos">Todos</option>
+                                      <option value="1">Janeiro</option>
+                                      <option value="2">Fevereiro</option>
+                                      <option value="3">Março</option>
+                                      <option value="4">Abril</option>
+                                      <option value="5">Maio</option>
+                                      <option value="6">Junho</option>
+                                      <option value="7">Julho</option>
+                                      <option value="8">Agosto</option>
+                                      <option value="9">Setembro</option>
+                                      <option value="10">Outubro</option>
+                                      <option value="11">Novembro</option>
+                                      <option value="12">Dezembro</option>
+                                    </select>
+                                  </div>
+                                </div>
+    
+                                <div class="col-12 col-sm-6 col-lg-3">
+                                  <div class="mb-3">
+                                    <label for="mes_cobranca" class="form-label">Mês de cobrança</label>
+                                    <select id="mes_cobranca" class="form-select">
+                                      <option value="todos">Todos</option>
+                                      <option value="1">Janeiro</option>
+                                      <option value="2">Fevereiro</option>
+                                      <option value="3">Março</option>
+                                      <option value="4">Abril</option>
+                                      <option value="5">Maio</option>
+                                      <option value="6">Junho</option>
+                                      <option value="7">Julho</option>
+                                      <option value="8">Agosto</option>
+                                      <option value="9">Setembro</option>
+                                      <option value="10">Outubro</option>
+                                      <option value="11">Novembro</option>
+                                      <option value="12">Dezembro</option>
+                                    </select>
+                                  </div>
+                                </div>
+    
+                                <div class="col-12 col-sm-6 col-lg-3">
+                                  <div class="mb-3">
+                                    <label for="mes_pagamento" class="form-label">Mês de pagamento</label>
+                                    <select id="mes_pagamento" class="form-select">
+                                      <option value="todos">Todos</option>
+                                      <option value="1">Janeiro</option>
+                                      <option value="2">Fevereiro</option>
+                                      <option value="3">Março</option>
+                                      <option value="4">Abril</option>
+                                      <option value="5">Maio</option>
+                                      <option value="6">Junho</option>
+                                      <option value="7">Julho</option>
+                                      <option value="8">Agosto</option>
+                                      <option value="9">Setembro</option>
+                                      <option value="10">Outubro</option>
+                                      <option value="11">Novembro</option>
+                                      <option value="12">Dezembro</option>
+                                    </select>
+                                  </div>
+                                </div>
+    
+                                <div class="col-12 col-sm-6 col-lg-3">
+                                  <div class="mb-3">
+                                    <label for="status_nota" class="form-label">Status da nota</label>
+                                    <select id="status_nota" class="form-select">
+                                      <option value="todos">Todos</option>
+                                      <option>Emitida</option>
+                                      <option>Cobrança realizada</option>
+                                      <option>Pagamento em atraso</option>
+                                      <option>Pagamento realizado</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                
+                              </div>
+                              <div class="row">
+                                <div class="col">
+                                  <div class="btn btn-secondary" id="btn_aplicar_filtros"> Aplicar Filtros </div>
+                                  <div class="btn btn-outline-secondary" id="btn_reset_filtros"> Resetar Filtros </div>
+                                </div>
+                              </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mb-2">
+                    <div class="col">
+                      <div class="table-responsive mt-3">
+                        <table class="table table-striped table-sm notas-table">
+                          <thead class="table-dark">
+                            <tr>
+                              <th>Número da nota </th>
+                              <th>Nome do pagador </th>
+                              <th>Data de emissão da nota </th>
+                              <th>Data da cobrança </th>
+                              <th>Data do pagamento </th>
+                              <th>Valor </th>
+                              <th>Documento da nota fiscal </th>
+                              <th>Documento do boleto bancário </th>
+                              <th>Status da nota </th>
+                            </tr>
+                          </thead>
+                          <tbody id="table-notas-tbody">
+                            
+                          </tbody>
+                        </table>
+                       
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+      </div>
+    
+      
+      <script src="assets/js/scripts.js"></script>
+      <script src="assets/js/bootstrap.min.js"></script>
+      <script src="assets/js/chart.umd.js"></script>
+      <script>
+        document.addEventListener("DOMContentLoaded", function (event) 
+        {
+          const btn_aplicar_filtros = document.getElementById('btn_aplicar_filtros');
+          const btn_reset_filtros = document.getElementById('btn_reset_filtros');
+          const formFiltros = document.getElementById('formFiltros');
+          const radios_filtro_inadiplencia = document.querySelectorAll("input[name=filtro-inadiplencia]");
+          const radios_filtro_receita = document.querySelectorAll("input[name=filtro-receita]");
+          const chartInadiplencia = criarChartInadiplencia();
+          const chartReceita = criarChartReceita();
+
+          btn_aplicar_filtros.addEventListener('click', aplicarFiltros);
+          btn_reset_filtros.addEventListener('click', function(){
+            formFiltros.reset();
+            carregarNotas(notas);
+          });
+
+          radios_filtro_inadiplencia.forEach(function(radio) {
+            radio.addEventListener('change', () => carregarChartInadiplencia(chartInadiplencia, radio.value));
+          });
+
+          radios_filtro_receita.forEach(function(radio) {
+            radio.addEventListener('change', () => carregarChartReceita(chartReceita, radio.value));
+          });
+
+          carregarNotas(notas);
+          carregarChartReceita(chartReceita);
+          carregarChartInadiplencia(chartInadiplencia);
+          carregarTabelaResumo();
+        });
+        
+        const carregarNotas = function(notas)
+        {
+          const table_notas_tbody = document.getElementById('table-notas-tbody');
+          table_notas_tbody.innerHTML = "";
+
+          if(notas.length == 0)
+          {
+            let trElement = document.createElement('tr');
+            let tdElement1  = document.createElement('td');
+            tdElement1.className = 'text-center text-muted fst-italic';
+            tdElement1.setAttribute('colspan', 9);
+            tdElement1.innerText = 'Sem notas para exibir.';
+
+            trElement.appendChild(tdElement1);
+            table_notas_tbody.appendChild(trElement);
+            return;
+          }
+
+          notas.map((nota) => 
+          {
+            let trElement = document.createElement('tr');
+
+            let tdElement1  = document.createElement('td');
+            let tdElement2  = document.createElement('td');
+            let tdElement3  = document.createElement('td');
+            let tdElement4  = document.createElement('td');
+            let tdElement5  = document.createElement('td');
+            let tdElement6  = document.createElement('td');
+            let tdElement7  = document.createElement('td');
+            let tdElement8  = document.createElement('td');
+            let tdElement9  = document.createElement('td');
+
+            tdElement1.innerText = nota.NumIdNota;
+            tdElement2.innerText = nota.NomePagador;
+            tdElement3.innerText = formatarData(nota.DataEmissaoNota);
+            tdElement4.innerText = formatarData(nota.DataCobranca);
+            tdElement5.innerText = formatarData(nota.DataPagamento);
+            tdElement6.innerText = formatarDinheiro(nota.ValorNota);
+            tdElement7.innerText = nota.DocumentoNotaFiscal;
+            tdElement8.innerText = nota.DocumentoBoletoBancario;
+            tdElement9.innerText = nota.StatusNota;
+
+            switch(nota.StatusNota)
+            {
+              case 'Emitida':
+                tdElement1.className = 'status-emitida';
+                break;
+              case 'Pagamento realizado':
+                tdElement1.className = 'status-pagamento-realizado';
+                break;
+              case 'Cobrança realizada':
+                tdElement1.className = 'status-cobranca-realizada';
+                break;
+              case 'Pagamento em atraso':
+                tdElement1.className = 'status-pagamento-atrasado';
+                break;
+            }
+
+            tdElement6.className = 'td-monetario';
+
+            trElement.appendChild(tdElement1);
+            trElement.appendChild(tdElement2);
+            trElement.appendChild(tdElement3);
+            trElement.appendChild(tdElement4);
+            trElement.appendChild(tdElement5);
+            trElement.appendChild(tdElement6);
+            trElement.appendChild(tdElement7);
+            trElement.appendChild(tdElement8);
+            trElement.appendChild(tdElement9);
+
+            table_notas_tbody.appendChild(trElement);
+          });
+        };
+       
+        const aplicarFiltros = function()
+        {
+          const mes_emissao   = formFiltros.elements['mes_emissao'].value;
+          const mes_cobranca  = formFiltros.elements['mes_cobranca'].value;
+          const mes_pagamento = formFiltros.elements['mes_pagamento'].value;
+          const status_nota   = formFiltros.elements['status_nota'].value;
+          
+          let notas_filtradas = notas;
+
+          if(mes_emissao != 'todos')
+          {
+            notas_filtradas = notas_filtradas.filter(x => (new Date(x.DataEmissaoNota).getMonth() + 1) == mes_emissao);
+          }
+
+          if(mes_cobranca != 'todos')
+          {
+            notas_filtradas = notas_filtradas.filter(x => (new Date(x.DataCobranca).getMonth() + 1) == mes_cobranca);
+          }
+          
+          if(mes_pagamento != 'todos')
+          {
+            notas_filtradas = notas_filtradas.filter(x => (new Date(x.DataPagamento).getMonth() + 1) == mes_pagamento);
+          }
+
+          if(status_nota != 'todos')
+          {
+            notas_filtradas = notas_filtradas.filter(x => x.StatusNota == status_nota);
+          }
+
+          carregarNotas(notas_filtradas);
+        }
+        
+        const criarChartInadiplencia = function()
+        {
+          const ctx = document.getElementById('chart-inadiplencia');
+          return new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: [],
+              datasets: [],
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        }
+
+        const criarChartReceita = function()
+        {
+          const ctx = document.getElementById('chart-receita');
+          return new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: [],
+              datasets: []
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    callback: function(value, index, values){
+                      return formatarDinheiro(value);
+                    }
+                  }
+                },
+              },
+              plugins: {
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      return formatarDinheiro(context.parsed.y);
+                    }
+                  }
+                }
+              }
+            },
+          });
+        }
+
+        const carregarChartReceita = function(chart, filtro = 'mensal')
+        {
+          const notasOrdenadas = notas.filter(x => x.DataPagamento != null).sort((x, y) => new Date(x.DataPagamento) - new Date(y.DataPagamento));
+            
+          const dadosGrafico = [];
+
+          if(filtro == 'mensal')
+          {
+            let anoPrimeiraNota = new Date(notasOrdenadas[0].DataPagamento).getFullYear();
+            
+            let anoAtual = new Date().getFullYear();
+            let mesAtual = new Date().getMonth() + 1;
+
+            for(let ano = anoPrimeiraNota; ano <= anoAtual; ano++)
+            {
+              for(let mes = 1; mes <= 12; mes++)
+              {
+                if(mes > mesAtual && ano == anoAtual) 
+                  continue;
+                
+                dadosGrafico.push({
+                  MesAno: mes+'/'+ano,
+                  ValorTotal: 0,
+                  Label: pegarNomeMes(mes, true)+'/'+ano
+                });
+              }
+            }
+
+            for(let nota of notasOrdenadas)
+            {
+              let mesAno = new Date(nota.DataPagamento).getMonth() + 1 + '/' + new Date(nota.DataPagamento).getFullYear();
+
+              let dados = dadosGrafico.find(x => x.MesAno == mesAno);
+              dados.ValorTotal += nota.ValorNota;
+            };
+          }
+
+          if(filtro == 'trimestral')
+          {
+            let anoPrimeiraNota = new Date(notasOrdenadas[0].DataPagamento).getFullYear();
+            
+            let anoAtual = new Date().getFullYear();
+            let mesAtual = new Date().getMonth() + 1;
+
+            for(let ano = anoPrimeiraNota; ano <= anoAtual; ano++)
+            {
+              let trimestre = 1;
+
+              for(let mes = 1; mes <= 12; mes += 3)
+              {
+                if(mes > mesAtual && ano == anoAtual) 
+                  continue;
+                
+                dadosGrafico.push({
+                  Trimestre: trimestre+'/'+ano,
+                  ValorTotal: 0,
+                  Label: trimestre+'º tri'+'/'+ano
+                });
+
+                trimestre++;
+              }
+            }
+
+            for(let nota of notasOrdenadas)
+            {
+              let mes = new Date(nota.DataPagamento).getMonth() + 1;
+              let ano = new Date(nota.DataPagamento).getFullYear();
+              let trimestre = Math.ceil(mes / 3)
+              
+              let trimestreAno = trimestre+'/'+ano;
+
+              let dados = dadosGrafico.find(x => x.Trimestre == trimestreAno);
+              dados.ValorTotal += nota.ValorNota;
+            };
+          }
+
+          if(filtro == 'anual')
+          {
+            let anoPrimeiraNota = new Date(notasOrdenadas[0].DataPagamento).getFullYear();
+            
+            let anoAtual = new Date().getFullYear();
+
+            for(let ano = anoPrimeiraNota; ano <= anoAtual; ano++)
+            {
+                dadosGrafico.push({
+                  Ano: ano,
+                  ValorTotal: 0,
+                  Label: ano
+                });
+            }
+
+            for(let nota of notasOrdenadas)
+            {
+              let ano = new Date(nota.DataPagamento).getFullYear();
+              let dados = dadosGrafico.find(x => x.Ano == ano);
+              dados.ValorTotal += nota.ValorNota;
+            };
+          }
+
+          let titulo = filtro == 'mensal'
+                        ? 'Mês'
+                        : filtro == 'trimestral'
+                           ? 'Trimestre'
+                           : 'Ano';
+
+          chart.data.labels = dadosGrafico.map(x => x.Label);
+          chart.data.datasets = [{
+            label: 'Receita por '+titulo,
+            data: dadosGrafico.map(x => x.ValorTotal),
+            backgroundColor: '#4bc0c0'
+          }];
+          chart.update();
+        }
+        
+        const carregarChartInadiplencia = function(chart, filtro = 'mensal')
+        {
+          const notasOrdenadas = notas.filter(x => x.StatusNota == 'Cobrança realizada').sort((x, y) => new Date(x.DataCobranca) - new Date(y.DataCobranca));
+
+          const dadosGrafico = [];
+
+          if(filtro == 'mensal')
+          {
+            let anoPrimeiraNota = new Date(notasOrdenadas[0].DataCobranca).getFullYear();
+            
+            let anoAtual = new Date().getFullYear();
+            let mesAtual = new Date().getMonth() + 1;
+
+            for(let ano = anoPrimeiraNota; ano <= anoAtual; ano++)
+            {
+              for(let mes = 1; mes <= 12; mes++)
+              {
+                if(mes > mesAtual && ano == anoAtual) 
+                  continue;
+                
+                dadosGrafico.push({
+                  MesAno: mes+'/'+ano,
+                  TotalInadiplentes: 0,
+                  Label: pegarNomeMes(mes, true)+'/'+ano
+                });
+              }
+            }
+
+            for(let nota of notasOrdenadas)
+            {
+              let mesAno = new Date(nota.DataCobranca).getMonth() + 1 + '/' + new Date(nota.DataCobranca).getFullYear();
+
+              let dados = dadosGrafico.find(x => x.MesAno == mesAno);
+              dados.TotalInadiplentes += 1;
+            };
+          }
+
+          if(filtro == 'trimestral')
+          {
+            let anoPrimeiraNota = new Date(notasOrdenadas[0].DataCobranca).getFullYear();
+            
+            let anoAtual = new Date().getFullYear();
+            let mesAtual = new Date().getMonth() + 1;
+
+            for(let ano = anoPrimeiraNota; ano <= anoAtual; ano++)
+            {
+              let trimestre = 1;
+
+              for(let mes = 1; mes <= 12; mes += 3)
+              {
+                if(mes > mesAtual && ano == anoAtual) 
+                  continue;
+                
+                dadosGrafico.push({
+                  Trimestre: trimestre+'/'+ano,
+                  TotalInadiplentes: 0,
+                  Label: trimestre+'º tri'+'/'+ano
+                });
+
+                trimestre++;
+              }
+            }
+
+            for(let nota of notasOrdenadas)
+            {
+              let mes = new Date(nota.DataCobranca).getMonth() + 1;
+              let ano = new Date(nota.DataCobranca).getFullYear();
+              let trimestre = Math.ceil(mes / 3)
+              
+              let trimestreAno = trimestre+'/'+ano;
+
+              let dados = dadosGrafico.find(x => x.Trimestre == trimestreAno);
+              dados.TotalInadiplentes += 1;
+            };
+          }
+
+          if(filtro == 'anual')
+          {
+            let anoPrimeiraNota = new Date(notasOrdenadas[0].DataCobranca).getFullYear();
+            
+            let anoAtual = new Date().getFullYear();
+
+            for(let ano = anoPrimeiraNota; ano <= anoAtual; ano++)
+            {
+                dadosGrafico.push({
+                  Ano: ano,
+                  TotalInadiplentes: 0,
+                  Label: ano
+                });
+            }
+
+            for(let nota of notasOrdenadas)
+            {
+              let ano = new Date(nota.DataCobranca).getFullYear();
+              let dados = dadosGrafico.find(x => x.Ano == ano);
+              dados.TotalInadiplentes += 1;
+            };
+          }
+
+          let titulo = filtro == 'mensal'
+                        ? 'Mês'
+                        : filtro == 'trimestral'
+                           ? 'Trimestre'
+                           : 'Ano';
+
+          chart.data.labels = dadosGrafico.map(x => x.Label);
+          chart.data.datasets = [{
+            label: 'Inadiplência por '+titulo,
+            data: dadosGrafico.map(x => x.TotalInadiplentes),
+            backgroundColor: '#FFB1C1',
+          }];
+          chart.update();
+        }
+
+        const carregarTabelaResumo = function()
+        {
+          const total_notas_emitidas = document.getElementById('total_notas_emitidas');
+          const total_notas_emitidas_sem_cobranca = document.getElementById('total_notas_emitidas_sem_cobranca');
+          const total_notas_vencidas = document.getElementById('total_notas_vencidas');
+          const total_notas_vencer = document.getElementById('total_notas_vencer');
+          const total_notas_pagas = document.getElementById('total_notas_pagas');
+
+          total_notas_emitidas.innerText = notas.length;
+          total_notas_emitidas_sem_cobranca.innerText = notas.filter(x => x.StatusNota == 'Emitida' && x.DataCobranca == null).length;
+          total_notas_vencidas.innerText = notas.filter(x => x.StatusNota == 'Pagamento em atraso').length;
+          total_notas_vencer.innerText = notas.filter(x => calcularDiferencaEntreDatas(new Date(), x.DataVencimento) <= 5 && x.StatusNota != 'Pagamento realizado').length;
+          total_notas_pagas.innerText = notas.filter(x => x.StatusNota == 'Pagamento realizado').length;
+        }
+      </script>
+    </body>
+</html>

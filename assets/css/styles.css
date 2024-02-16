@@ -1,0 +1,129 @@
+.notas-table td
+{
+    text-align: center;
+    vertical-align: middle;
+}
+
+.notas-table tr:first-child
+{
+    border-left: 4px solid #212529;
+}
+
+.notas-table td.td-monetario
+{
+    text-align: right;
+}
+
+
+#sidebarMenu .nav-item .nav-link
+{
+    margin: 3px 0 3px 15px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+#sidebarMenu .nav-link
+{
+    color: #f8f9fa;
+}
+
+#sidebarMenu .nav-link:hover
+{
+    background-color: #5b6773 ;
+}
+
+#sidebarMenu .nav-link:active
+{
+    background-color: #32393f ;
+}
+
+#sidebarMenu .nav-link.active
+{
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+@media (max-width: 767.98px) 
+{
+    #sidebarMenu .nav-item .nav-link {
+        margin: 3px 15px 3px 15px;
+        border-radius: 15px;
+    }
+}
+
+.profile img
+{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+
+.status-emitida
+{
+    border-left: 4px solid #3b82f6;
+}
+
+.status-pagamento-atrasado
+{
+    border-left: 4px solid #eab308;
+}
+
+.status-cobranca-realizada
+{
+    border-left: 4px solid #ef4444;
+}
+
+.status-pagamento-realizado
+{
+    border-left: 4px solid #22c55e;
+}
+
+.legenda-status-emitida
+{
+    background-color: #3b82f6;
+}
+.legenda-pagamento-atrasado
+{
+    background-color: #eab308;
+}
+.legenda-cobranca-realizada
+{
+    background-color: #ef4444;
+}
+.legenda-status-pagamento-realizado
+{
+    background-color: #22c55e;
+}
+.quadrado{
+    width: 13px;
+    height: 13px;
+    content: " ";
+    margin-right: 8px;
+}
+
+
+.btn-radio
+{
+    display: none;
+}
+
+.btn-radio-label
+{
+    display: inline-block;
+    padding: .375rem .75rem;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #6c757d;
+    background-color: transparent;
+    color: #6c757d;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-radio:checked + .btn-radio-label
+{
+    background-color: #6c757d;
+    color: #fff;
+}
